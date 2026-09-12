@@ -1,0 +1,61 @@
+# Dependencies
+node_modules/
+**/node_modules/
+.pnp
+.pnp.js
+
+# Build Outputs
+dist/
+**/dist/
+build/
+**/build/
+.next/
+**/.next/
+out/
+**/out/
+storybook-static/
+**/storybook-static/
+
+# Environment Variables & Local Secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+
+# IDE & OS Metadata
+.DS_Store
+Thumbs.db
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+
+# Agent & Brain Cache
+.gemini/
+.system_generated/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Next.js & Turbopack Cache
+.turbo/
+**/.turbo/
+
+# ─── Private Internal Course Materials & Architecture Guides ───
+# Kept strictly local for personal reference; excluded from public GitHub portfolio
+*.pdf
+Digital Presence Playbook/
+Elevvo Internship Instructions Wave 15 B1/
+Web Development Track/
+FRONTEND_ARCHITECTURE_BLUEPRINT.md
+PRODUCTION_STANDARDS_PLAYBOOK.md
+INTERNSHIP_ROADMAP.md
+الكتالوج الذهبي وتظبيط الاداء والديزاين والكلام ده/
+*.txt
