@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="TaskFlow — The modern, intuitive task management and high-velocity team collaboration platform for fast-moving engineering teams." />
+  <meta name="author" content="Sayed Nada" />
+  <title>TaskFlow | Organize Work & Supercharge Productivity</title>
+
+  <!-- Performance Resource Hints & Google Fonts: Outfit (Display Headlines), Plus Jakarta Sans (Body), and Alexandria (Modern Geometric Arabic) -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://images.unsplash.com" />
+  <link rel="dns-prefetch" href="https://images.unsplash.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Custom Interactive Magnetic Cursor -->
+  <div class="custom-cursor-dot" id="custom-cursor-dot" aria-hidden="true"></div>
+  <div class="custom-cursor-ring" id="custom-cursor-ring" aria-hidden="true"></div>
+
+  <!-- Scroll Progress Indicator (Top Glowing Bar) -->
+  <div class="scroll-progress-bar" id="scroll-progress-bar" aria-hidden="true"></div>
+
+  <!-- Ambient Floating Glow Accents -->
+  <div class="ambient-glow glow-1" aria-hidden="true"></div>
+  <div class="ambient-glow glow-2" aria-hidden="true"></div>
+  <div class="ambient-glow glow-3" aria-hidden="true"></div>
+
+  <!-- Floating Vertical Social Dock (Matches User Reference Screenshot) -->
+  <aside class="floating-social-dock" aria-label="Social Links">
+    <div class="social-dock-pill">
+      <a href="https://github.com/SayedNada74" target="_blank" rel="noopener noreferrer" class="dock-link" aria-label="GitHub Profile">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        <span class="dock-tooltip">GitHub</span>
+      </a>
+
+      <a href="https://linkedin.com/in/sayed-nada-6852b9345" target="_blank" rel="noopener noreferrer" class="dock-link" aria-label="LinkedIn Profile">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+          <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+        </svg>
+        <span class="dock-tooltip">LinkedIn</span>
+      </a>
+
+      <a href="https://wa.me/201206620678" target="_blank" rel="noopener noreferrer" class="dock-link" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+        </svg>
+        <span class="dock-tooltip">WhatsApp</span>
+      </a>
+
+      <a href="mailto:sayedmahmouda00@gmail.com" class="dock-link" aria-label="Send Email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+          <polyline points="22,6 12,13 2,6"></polyline>
+        </svg>
+        <span class="dock-tooltip">Email</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Sticky Glass Navbar -->
+  <header class="navbar glass" id="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="brand-logo" aria-label="TaskFlow Homepage">
+        <div class="logo-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+        <div class="logo-title-group">
+          <span class="logo-name">TaskFlow</span>
+          <span class="logo-badge-text">v2.4</span>
+        </div>
+      </a>      <!-- Desktop Pill Navigation (Floating Capsule matching user reference) -->
+      <nav class="desktop-nav" aria-label="Main Navigation">
+        <div class="pill-nav-wrapper">
+          <ul class="nav-pill-list" role="list">
+            <li class="nav-pill-item">
+              <a href="#hero" class="nav-pill-link active" data-nav="hero">
+                <span data-i18n="nav_home">Home</span>
+                <span class="nav-pill-glow" aria-hidden="true"></span>
+              </a>
+            </li>
+            <li class="nav-pill-item">
+              <a href="#features" class="nav-pill-link" data-nav="features">
+                <span data-i18n="nav_features">Features</span>
+                <span class="nav-pill-glow" aria-hidden="true"></span>
+              </a>
+            </li>
+            <li class="nav-pill-item">
+              <a href="#testimonials" class="nav-pill-link" data-nav="testimonials">
+                <span data-i18n="nav_testimonials">Reviews</span>
+                <span class="nav-pill-glow" aria-hidden="true"></span>
+              </a>
+            </li>
+            <li class="nav-pill-item">
+              <a href="#pricing" class="nav-pill-link" data-nav="pricing">
+                <span data-i18n="nav_pricing">Pricing</span>
+                <span class="nav-pill-glow" aria-hidden="true"></span>
+              </a>
+            </li>
+            <li class="nav-pill-item">
+              <a href="#cta" class="nav-pill-link" data-nav="cta">
+                <span data-i18n="nav_get_started">Get Started</span>
+                <span class="nav-pill-glow" aria-hidden="true"></span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- Nav Controls: Theme, Language, CTA -->
+      <div class="nav-actions">
+        <!-- Theme Switcher -->
+        <button class="control-btn" id="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme (T)">
+          <svg class="theme-icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <span class="control-label" id="theme-btn-label">Dark</span>
+        </button>
+
+        <!-- Language Switcher -->
+        <button class="control-btn" id="lang-toggle-btn" aria-label="Toggle Language" title="Toggle Language (L)">
+          <svg class="control-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <span class="control-label" id="lang-btn-label">EN</span>
+        </button>
+
+        <a href="#pricing" class="btn btn-primary nav-cta-btn" data-i18n="nav_cta">Start Free Trial</a>
+
+        <!-- Mobile Hamburger Button -->
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open Navigation Menu" aria-expanded="false">
+          <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-menu-drawer" id="mobile-menu-drawer" aria-hidden="true">
+      <div class="mobile-drawer-content">
+        <nav class="mobile-nav-links">
+          <a href="#hero" class="mobile-nav-link active" data-nav="hero" data-i18n="nav_home">Home</a>
+          <a href="#features" class="mobile-nav-link" data-nav="features" data-i18n="nav_features">Features</a>
+          <a href="#testimonials" class="mobile-nav-link" data-nav="testimonials" data-i18n="nav_testimonials">Reviews</a>
+          <a href="#pricing" class="mobile-nav-link" data-nav="pricing" data-i18n="nav_pricing">Pricing</a>
+          <a href="#cta" class="mobile-nav-link" data-nav="cta" data-i18n="nav_get_started">Get Started</a>
+        </nav>
+        <a href="#pricing" class="btn btn-primary mobile-cta" data-i18n="nav_cta">Start Free Trial</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Landing Content -->
+  <main>
+    <!-- ========================================================================
+         SECTION 1: HERO SECTION
+         ======================================================================== -->
+    <section class="hero-section" id="hero">
+      <div class="hero-container">
+        <!-- Live Tag Announcement -->
+        <div class="badge-safe hero-badge reveal-on-scroll">
+          <span class="status-pulse-dot"></span>
+          <span data-i18n="hero_pill">TaskFlow 2.4 is Live • Next-Gen Work OS</span>
+        </div>
+
+        <h1 class="hero-title reveal-on-scroll">
+          <span data-i18n="hero_title_1">Organize your tasks,</span><br />
+          <span class="gradient-text" data-i18n="hero_title_gradient">streamline your flow,</span><br />
+          <span data-i18n="hero_title_2">achieve 3x more.</span>
+        </h1>
+
+        <p class="hero-subtitle reveal-on-scroll" data-i18n="hero_subtitle">
+          TaskFlow empowers fast-moving teams and individuals to plan, track, and ship high-impact work with intuitive visual boards, real-time sync, and smart productivity analytics.
+        </p>
+
+        <!-- Hero CTAs -->
+        <div class="hero-actions reveal-on-scroll">
+          <a href="#pricing" class="btn btn-primary btn-hero">
+            <span data-i18n="btn_hero_primary">Get Started Free</span>
+            <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="#features" class="btn btn-secondary btn-hero">
+            <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span data-i18n="btn_hero_secondary">Explore Features</span>
+          </a>
+        </div>
+
+        <!-- Social Proof Stats Mini Strip -->
+        <div class="hero-social-proof reveal-on-scroll">
+          <div class="proof-item">
+            <span class="proof-num">45k+</span>
+            <span class="proof-label" data-i18n="proof_tasks">Tasks Completed</span>
+          </div>
+          <div class="proof-divider"></div>
+          <div class="proof-item">
+            <span class="proof-num">99.9%</span>
+            <span class="proof-label" data-i18n="proof_uptime">Uptime Reliability</span>
+          </div>
+          <div class="proof-divider"></div>
+          <div class="proof-item">
+            <span class="proof-num">4.9/5</span>
+            <span class="proof-label" data-i18n="proof_rating">User Satisfaction</span>
+          </div>
+        </div>
+
+        <!-- Interactive Mockup Preview Card -->
+        <div class="hero-preview-wrapper reveal-on-scroll">
+          <div class="mockup-frame card">
+            <div class="mockup-header">
+              <div class="window-dots">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+              </div>
+              <span class="mockup-title">TaskFlow Dashboard — Active Sprint 15</span>
+              <div class="mockup-status-tag" data-i18n="tag_synced">● Synced</div>
+            </div>
+
+            <!-- Simulated Kanban Board -->
+            <div class="mockup-body">
+              <!-- Column 1: In Progress -->
+              <div class="kanban-col">
+                <div class="col-head">
+                  <span class="col-title" data-i18n="col_in_progress">In Progress</span>
+                  <span class="col-count">2</span>
+                </div>
+                <div class="sample-task-card">
+                  <div class="task-category sky">Frontend</div>
+                  <h4 class="task-name">Build Responsive Sidebar & Theme Engine</h4>
+                  <div class="task-footer">
+                    <span class="task-due">Oct 12</span>
+                    <span class="priority-badge high">High</span>
+                  </div>
+                </div>
+                <div class="sample-task-card">
+                  <div class="task-category purple">API Integration</div>
+                  <h4 class="task-name">Real-Time WebSocket Sync Protocol</h4>
+                  <div class="task-footer">
+                    <span class="task-due">Oct 15</span>
+                    <span class="priority-badge med">Medium</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Column 2: Review -->
+              <div class="kanban-col">
+                <div class="col-head">
+                  <span class="col-title" data-i18n="col_review">Under Review</span>
+                  <span class="col-count">1</span>
+                </div>
+                <div class="sample-task-card">
+                  <div class="task-category emerald">Accessibility</div>
+                  <h4 class="task-name">Audit ARIA Live Announcers & Color Contrast</h4>
+                  <div class="task-footer">
+                    <span class="task-due">Today</span>
+                    <span class="priority-badge safe">Passed</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Column 3: Done -->
+              <div class="kanban-col">
+                <div class="col-head">
+                  <span class="col-title" data-i18n="col_done">Completed</span>
+                  <span class="col-count">3</span>
+                </div>
+                <div class="sample-task-card completed-task">
+                  <div class="task-category gray">Architecture</div>
+                  <h4 class="task-name">Design Token System & Zinc Theme Setup</h4>
+                  <div class="task-footer">
+                    <span class="task-due">Yesterday</span>
+                    <span class="priority-badge safe">100% Done</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         SECTION 2: 3 CORE FEATURES (With Icons & Detailed Descriptions)
+         ======================================================================== -->
+    <section class="features-section" id="features">
+      <div class="section-container">
+        <div class="section-header reveal-on-scroll">
+          <div class="badge-safe">
+            <span class="status-pulse-dot"></span>
+            <span data-i18n="feat_section_badge">Why Choose TaskFlow</span>
+          </div>
+          <h2 class="section-title" data-i18n="feat_section_title">Engineered for Maximum Clarity & Velocity</h2>
+          <p class="section-subtitle" data-i18n="feat_section_sub">
+            Built from the ground up to replace fragmented spreadsheets, chaotic email threads, and bloated legacy project management tools.
+          </p>
+        </div>
+
+        <!-- 3 Feature Cards Grid -->
+        <div class="features-grid">
+          <!-- Feature 1 -->
+          <article class="feature-card card reveal-on-scroll">
+            <div class="feature-icon-badge sky">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="18" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="11" rx="1"></rect>
+              </svg>
+            </div>
+            <h3 class="feature-card-title" data-i18n="feat_1_title">Visual Drag & Drop Kanban</h3>
+            <p class="feature-card-desc" data-i18n="feat_1_desc">
+              Move work forward effortlessly. Structure complex workflows into customizable columns, color-coded priorities, and due-date milestones with fluid 60 FPS interactions.
+            </p>
+            <ul class="feature-bullets">
+              <li data-i18n="feat_1_b1">Customizable workflow stages</li>
+              <li data-i18n="feat_1_b2">Color-coded labels & tags</li>
+              <li data-i18n="feat_1_b3">Smooth tactile drag feedback</li>
+            </ul>
+          </article>
+
+          <!-- Feature 2 -->
+          <article class="feature-card card reveal-on-scroll">
+            <div class="feature-icon-badge emerald">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </div>
+            <h3 class="feature-card-title" data-i18n="feat_2_title">Real-Time Team Sync</h3>
+            <p class="feature-card-desc" data-i18n="feat_2_desc">
+              Collaborate without friction. See teammate edits instantly, leave rich markdown comments, tag coworkers with @mentions, and receive instant push notifications.
+            </p>
+            <ul class="feature-bullets">
+              <li data-i18n="feat_2_b1">Instant live cursor updates</li>
+              <li data-i18n="feat_2_b2">Rich Markdown task descriptions</li>
+              <li data-i18n="feat_2_b3">Granular role-based permissions</li>
+            </ul>
+          </article>
+
+          <!-- Feature 3 -->
+          <article class="feature-card card reveal-on-scroll">
+            <div class="feature-icon-badge amber">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+            </div>
+            <h3 class="feature-card-title" data-i18n="feat_3_title">Deep Productivity Analytics</h3>
+            <p class="feature-card-desc" data-i18n="feat_3_desc">
+              Uncover bottlenecks before they derail deadlines. Track team velocity, completion ratios, burndown metrics, and generate executive summaries with single-click exports.
+            </p>
+            <ul class="feature-bullets">
+              <li data-i18n="feat_3_b1">Automated burndown charts</li>
+              <li data-i18n="feat_3_b2">Weekly velocity breakdowns</li>
+              <li data-i18n="feat_3_b3">Exportable CSV & PDF reports</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         SECTION 3: TESTIMONIALS & USER REVIEWS
+         ======================================================================== -->
+    <section class="testimonials-section" id="testimonials">
+      <div class="section-container">
+        <div class="section-header reveal-on-scroll">
+          <div class="badge-safe">
+            <span class="status-pulse-dot"></span>
+            <span data-i18n="test_badge">Loved by Product Builders</span>
+          </div>
+          <h2 class="section-title" data-i18n="test_title">Trusted by Fast-Growing Engineering Teams</h2>
+          <p class="section-subtitle" data-i18n="test_sub">
+            See how developers, designers, and project managers supercharge their weekly output using TaskFlow.
+          </p>
+        </div>
+
+        <!-- 3 Testimonials Grid -->
+        <div class="testimonials-grid">
+          <!-- Review 1 -->
+          <blockquote class="testimonial-card card reveal-on-scroll">
+            <div class="rating-stars" aria-label="5 out of 5 stars">
+              ★★★★★
+            </div>
+            <p class="quote-text" data-i18n="review_1_text">
+              "TaskFlow cut our daily sync meeting time in half. The visual Kanban board is so snappy and clean that our entire engineering team adopted it within 48 hours without any training."
+            </p>
+            <footer class="author-meta">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=90&h=90&fit=crop&crop=face&auto=format&q=80" alt="Sarah Jenkins" class="author-avatar" width="44" height="44" loading="lazy" decoding="async" />
+              <div class="author-info">
+                <cite class="author-name">Sarah Jenkins</cite>
+                <span class="author-role" data-i18n="review_1_role">VP of Engineering @ CloudScale</span>
+              </div>
+            </footer>
+          </blockquote>
+
+          <!-- Review 2 -->
+          <blockquote class="testimonial-card card reveal-on-scroll">
+            <div class="rating-stars" aria-label="5 out of 5 stars">
+              ★★★★★
+            </div>
+            <p class="quote-text" data-i18n="review_2_text">
+              "As a solo tech consultant managing 6 freelance clients simultaneously, TaskFlow has been an absolute lifesaver. The dark mode is gorgeous, and the keyboard shortcuts make planning a breeze."
+            </p>
+            <footer class="author-meta">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=90&h=90&fit=crop&crop=face&auto=format&q=80" alt="Karim El-Sayed" class="author-avatar" width="44" height="44" loading="lazy" decoding="async" />
+              <div class="author-info">
+                <cite class="author-name">Karim El-Sayed</cite>
+                <span class="author-role" data-i18n="review_2_role">Senior Frontend Architect</span>
+              </div>
+            </footer>
+          </blockquote>
+
+          <!-- Review 3 -->
+          <blockquote class="testimonial-card card reveal-on-scroll">
+            <div class="rating-stars" aria-label="5 out of 5 stars">
+              ★★★★★
+            </div>
+            <p class="quote-text" data-i18n="review_3_text">
+              "The depth of analytics without the overwhelming complexity of Jira is unmatched. We shipped our major quarterly release 2 weeks ahead of our projected timeline thanks to TaskFlow!"
+            </p>
+            <footer class="author-meta">
+              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=90&h=90&fit=crop&crop=face&auto=format&q=80" alt="Elena Rostova" class="author-avatar" width="44" height="44" loading="lazy" decoding="async" />
+              <div class="author-info">
+                <cite class="author-name">Elena Rostova</cite>
+                <span class="author-role" data-i18n="review_3_role">Product Lead @ NextGen Labs</span>
+              </div>
+            </footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         SECTION 4: 3 PRICING OPTIONS (Free, Pro, Team)
+         ======================================================================== -->
+    <section class="pricing-section" id="pricing">
+      <div class="section-container">
+        <div class="section-header reveal-on-scroll">
+          <div class="badge-safe">
+            <span class="status-pulse-dot"></span>
+            <span data-i18n="pricing_badge">Transparent Investment</span>
+          </div>
+          <h2 class="section-title" data-i18n="pricing_title">Simple, Predictable Plans for Every Stage</h2>
+          <p class="section-subtitle" data-i18n="pricing_sub">
+            Start completely free. Upgrade only when your team expands. No hidden fees or lock-in contracts.
+          </p>
+
+          <!-- Billing Period Switcher (Monthly / Annual) -->
+          <div class="billing-switcher" role="group" aria-label="Billing frequency toggle">
+            <span class="billing-label active" id="label-monthly" data-i18n="bill_monthly">Monthly</span>
+            <button class="billing-toggle-btn" id="billing-toggle-btn" aria-label="Toggle between monthly and annual billing">
+              <span class="toggle-slider"></span>
+            </button>
+            <span class="billing-label" id="label-annual">
+              <span data-i18n="bill_annual">Yearly</span>
+              <span class="discount-pill" data-i18n="discount_tag">Save 20%</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- 3 Pricing Cards Grid -->
+        <div class="pricing-grid">
+          <!-- Tier 1: Free -->
+          <div class="pricing-card card reveal-on-scroll">
+            <div class="tier-header">
+              <h3 class="tier-name" data-i18n="tier_free_name">Free Starter</h3>
+              <p class="tier-desc" data-i18n="tier_free_desc">Essential visual task tracking for individuals and solo developers.</p>
+            </div>
+            <div class="tier-price-box">
+              <span class="currency">$</span>
+              <span class="price-value" data-free="0">0</span>
+              <span class="price-period" data-i18n="price_forever">/ forever</span>
+            </div>
+            <ul class="tier-features-list">
+              <li data-i18n="free_feat_1">Up to 3 Active Task Boards</li>
+              <li data-i18n="free_feat_2">Unlimited Task Cards</li>
+              <li data-i18n="free_feat_3">Basic Filter & Search</li>
+              <li data-i18n="free_feat_4">7-day Activity History</li>
+              <li class="muted-feat" data-i18n="free_feat_5">Team Collaboration</li>
+            </ul>
+            <a href="#cta" class="btn btn-secondary btn-tier" data-i18n="btn_tier_free">Get Started Free</a>
+          </div>
+
+          <!-- Tier 2: Pro (Most Popular Highlighted) -->
+          <div class="pricing-card card popular reveal-on-scroll">
+            <div class="popular-tag" data-i18n="tag_popular">⭐ Most Popular</div>
+            <div class="tier-header">
+              <h3 class="tier-name" data-i18n="tier_pro_name">Pro Specialist</h3>
+              <p class="tier-desc" data-i18n="tier_pro_desc">For ambitious professionals and small agile squads needing velocity.</p>
+            </div>
+            <div class="tier-price-box">
+              <span class="currency">$</span>
+              <span class="price-value" id="price-pro" data-monthly="19" data-annual="15">19</span>
+              <span class="price-period" id="period-pro" data-i18n="price_per_month">/ user / mo</span>
+            </div>
+            <ul class="tier-features-list">
+              <li data-i18n="pro_feat_1"><strong>Unlimited</strong> Active Boards</li>
+              <li data-i18n="pro_feat_2">Real-Time Team Live Sync</li>
+              <li data-i18n="pro_feat_3">Advanced Velocity Analytics</li>
+              <li data-i18n="pro_feat_4">Automated Task Reminders</li>
+              <li data-i18n="pro_feat_5">Priority 24/7 Email Support</li>
+            </ul>
+            <a href="#cta" class="btn btn-primary btn-tier" data-i18n="btn_tier_pro">Start 14-Day Free Trial</a>
+          </div>
+
+          <!-- Tier 3: Team / Enterprise -->
+          <div class="pricing-card card reveal-on-scroll">
+            <div class="tier-header">
+              <h3 class="tier-name" data-i18n="tier_team_name">Team Enterprise</h3>
+              <p class="tier-desc" data-i18n="tier_team_desc">Custom security, advanced governance, and dedicated account management.</p>
+            </div>
+            <div class="tier-price-box">
+              <span class="currency">$</span>
+              <span class="price-value" id="price-team" data-monthly="49" data-annual="39">49</span>
+              <span class="price-period" id="period-team" data-i18n="price_per_month">/ user / mo</span>
+            </div>
+            <ul class="tier-features-list">
+              <li data-i18n="team_feat_1">Everything in Pro</li>
+              <li data-i18n="team_feat_2">SSO & SAML Authentication</li>
+              <li data-i18n="team_feat_3">Custom Roles & Permissions</li>
+              <li data-i18n="team_feat_4">Audit Logs & Compliance</li>
+              <li data-i18n="team_feat_5">Dedicated Customer Success Manager</li>
+            </ul>
+            <a href="#cta" class="btn btn-secondary btn-tier" data-i18n="btn_tier_team">Contact Sales</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         SECTION 5: BOTTOM CALL-TO-ACTION (CTA)
+         ======================================================================== -->
+    <section class="cta-section" id="cta">
+      <div class="section-container">
+        <div class="cta-card card reveal-on-scroll">
+          <div class="badge-safe">
+            <span class="status-pulse-dot"></span>
+            <span data-i18n="cta_pill">Instant Setup • No Credit Card Required</span>
+          </div>
+
+          <h2 class="cta-title" data-i18n="cta_title">Ready to streamline your workflow and ship faster?</h2>
+          <p class="cta-desc" data-i18n="cta_desc">
+            Join over 45,000+ engineers, product managers, and remote teams who run their daily productivity on TaskFlow.
+          </p>
+
+          <form class="cta-subscribe-form" id="newsletter-form" novalidate>
+            <div class="cta-input-wrapper">
+              <input 
+                type="email" 
+                id="newsletter-email" 
+                class="cta-email-input" 
+                placeholder="Enter your work email..." 
+                data-i18n-placeholder="ph_work_email" 
+                required 
+                aria-label="Work Email Address"
+              />
+              <button type="submit" class="btn btn-primary btn-subscribe" id="subscribe-btn">
+                <span data-i18n="btn_claim_trial">Claim Free Trial</span>
+              </button>
+            </div>
+            <p class="subscribe-feedback" id="subscribe-feedback" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       SECTION 6: COMPREHENSIVE FOOTER
+       ======================================================================== -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-top-grid">
+        <!-- Brand Summary Column -->
+        <div class="footer-brand-col">
+          <a href="#hero" class="brand-logo footer-logo">
+            <div class="logo-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+              </svg>
+            </div>
+            <span class="logo-name">TaskFlow</span>
+          </a>
+          <p class="footer-brand-desc" data-i18n="footer_brand_desc">
+            The high-velocity task management platform designed for ambitious creators and engineering squads.
+          </p>
+          <div class="creator-badge">
+            <span class="creator-status-dot" aria-hidden="true"></span>
+            <span data-i18n="footer_built_by">Crafted with precision by</span> 
+            <strong>Sayed Nada</strong>
+          </div>
+        </div>
+
+        <!-- Quick Navigation Column -->
+        <div class="footer-nav-col">
+          <h4 class="footer-col-title" data-i18n="footer_col_product">Product</h4>
+          <ul class="footer-links" role="list">
+            <li><a href="#features" data-i18n="nav_features">Features</a></li>
+            <li><a href="#pricing" data-i18n="nav_pricing">Pricing Plans</a></li>
+            <li><a href="#testimonials" data-i18n="nav_testimonials">User Reviews</a></li>
+            <li><a href="#hero" data-i18n="footer_releases">Releases & Changelog</a></li>
+          </ul>
+        </div>
+
+        <!-- Resources Column -->
+        <div class="footer-nav-col">
+          <h4 class="footer-col-title" data-i18n="footer_col_resources">Resources</h4>
+          <ul class="footer-links" role="list">
+            <li><a href="#features" data-i18n="footer_docs">Documentation</a></li>
+            <li><a href="#features" data-i18n="footer_api">API Reference</a></li>
+            <li><a href="#features" data-i18n="footer_guides">Guides & Tutorials</a></li>
+            <li><a href="#cta" data-i18n="footer_community">Community Forum</a></li>
+          </ul>
+        </div>
+
+        <!-- Connect & Social Media Column -->
+        <div class="footer-nav-col">
+          <h4 class="footer-col-title" data-i18n="footer_col_connect">Direct Connect</h4>
+          <div class="footer-social-links">
+            <a href="https://github.com/SayedNada74" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="GitHub Profile" title="GitHub">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+              </svg>
+            </a>
+
+            <a href="https://linkedin.com/in/sayed-nada-6852b9345" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="LinkedIn Profile" title="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+              </svg>
+            </a>
+
+            <a href="mailto:sayedmahmouda00@gmail.com" class="social-btn" aria-label="Send Email" title="Gmail">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </a>
+
+            <a href="https://wa.me/201206620678" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="WhatsApp" title="WhatsApp">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+              </svg>
+            </a>
+          </div>
+          <span class="footer-contact-note" data-i18n="footer_contact_note">Cairo, Egypt • sayedmahmouda00@gmail.com</span>
+        </div>
+      </div>
+
+      <!-- Footer Bottom Copyright Bar -->
+      <div class="footer-bottom-bar">
+        <p class="copyright-text">
+          &copy; 2026 TaskFlow Technologies Inc. All rights reserved.
+        </p>
+        <div class="footer-badges">
+          <span class="badge-mini" data-i18n="footer_badge">SOC2 Type II • 99.99% Uptime SLA</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script -->
+  <script src="app.js"></script>
+</body>
+</html>
