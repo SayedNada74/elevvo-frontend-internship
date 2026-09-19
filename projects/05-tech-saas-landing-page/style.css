@@ -1,0 +1,631 @@
+/* ==========================================================================
+   NovaScale AI — Master Design System & Architecture Stylesheet
+   Elevvo Frontend Web Development Track — Task 05: Tech SaaS Landing Page
+   Engineered by Sayed Nada | FRONTEND_ARCHITECTURE_BLUEPRINT.md Compliant
+   ========================================================================== */
+
+:root {
+  /* ─── Background & Foreground (Blueprint Section 2) ─── */
+  --bg-main: #09090b;       /* Zinc 950 obsidian dark */
+  --bg-gradient: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.14) 0%, rgba(9, 9, 11, 0.98) 75%);
+  --surface-card: rgba(18, 20, 31, 0.8);
+  --surface-card-hover: rgba(26, 29, 44, 0.95);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(6, 182, 212, 0.45);
+  --text-primary: #fafafa;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+
+  /* ─── Accent Color System (Blueprint Section 2: Cyan & Teal) ─── */
+  --brand-cyan: #06b6d4;      /* Cyan 500 */
+  --brand-teal: #0d9488;      /* Teal 600 */
+  --brand-primary: #06b6d4;
+  --brand-primary-hover: #0891b2;
+  --brand-sky: #38bdf8;
+  --brand-indigo: #6366f1;
+  --brand-purple: #a855f7;
+  --brand-emerald: #10b981;
+  --brand-amber: #f59e0b;
+  --brand-rose: #ef4444;
+
+  /* ─── Typography Stacks (Blueprint Section 3) ─── */
+  --font-sans: 'Lexend', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-arabic: 'IBM Plex Sans Arabic', 'Tajawal', system-ui, sans-serif;
+}
+
+/* Scrollbar Stability (Blueprint Section 9) */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* Light Mode Overrides (Blueprint Section 2 & 10) */
+html.light {
+  --bg-main: #fafafa;       /* Zinc 50 crisp light */
+  --bg-gradient: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.09) 0%, rgba(250, 250, 250, 0.98) 75%);
+  --surface-card: rgba(255, 255, 255, 0.92);
+  --surface-card-hover: #ffffff;
+  --border-subtle: rgba(15, 23, 42, 0.1);
+  --border-highlight: rgba(6, 182, 212, 0.5);
+  --text-primary: #09090b;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+}
+
+/* ─── Hard Rule: Maximum Contrast Text (Blueprint Section 2) ─── */
+.dark [class*="text-slate-4"],
+.dark [class*="text-zinc-4"],
+.dark [class*="text-muted"] {
+  color: #cbd5e1 !important;
+}
+
+.dark [class*="text-slate-5"],
+.dark [class*="text-zinc-5"] {
+  color: #94a3b8 !important;
+}
+
+html.light [class*="text-slate-6"],
+html.light [class*="text-slate-7"],
+html.light [class*="text-slate-8"] {
+  color: #1e293b !important;
+}
+
+html.light [class*="text-slate-4"],
+html.light [class*="text-slate-5"] {
+  color: #475569 !important;
+}
+
+/* ─── Input Autofill Dark/Light Fix (Blueprint Section 11) ─── */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #09090b !important;
+  transition: background-color 50000s ease-in-out 0s;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #fafafa !important;
+}
+
+[dir="rtl"] {
+  font-family: var(--font-arabic);
+}
+
+[dir="ltr"] {
+  font-family: var(--font-sans);
+}
+
+body {
+  background-color: var(--bg-main);
+  background-image: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  overflow-x: clip; /* Modern standard: clips horizontal overflow without breaking position: sticky */
+  -webkit-tap-highlight-color: transparent;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ─── Floating Header Sticky Architecture Guarantee ─── */
+header {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 10px !important;
+  z-index: 50 !important;
+}
+
+/* Arabic text readability (Blueprint Section 3 & Playbook 2.2) */
+[dir="rtl"] p,
+[dir="rtl"] article {
+  line-height: 1.7;
+}
+
+/* ─── Global Focus Ring (Blueprint Section 8) ─── */
+*:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #06b6d4 !important;
+}
+
+/* ─── Scroll Progress Bar (Glowing 0-100% Top Telemetry Tracker) ─── */
+#scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #06b6d4, #6366f1, #a855f7);
+  z-index: 100;
+  pointer-events: none;
+  transition: width 0.08s ease-out;
+  width: 0%;
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.7), 0 0 4px rgba(99, 102, 241, 0.5);
+}
+
+/* ─── Custom Interactive Magnetic Cursor (Task 3 Proven Architecture) ─── */
+.custom-cursor-dot,
+.custom-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  z-index: 9999999;
+  opacity: 0;
+  will-change: transform;
+}
+
+.custom-cursor-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #06b6d4;
+  box-shadow: 0 0 12px #06b6d4, 0 0 4px #22d3ee;
+  transition: opacity 0.3s ease, background-color 0.2s ease;
+  transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
+}
+
+.custom-cursor-ring {
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid rgba(6, 182, 212, 0.55);
+  background: rgba(6, 182, 212, 0.04);
+  backdrop-filter: blur(1px);
+  box-shadow: 0 0 18px rgba(6, 182, 212, 0.18);
+  transition: opacity 0.3s ease, border-color 0.2s ease, background-color 0.2s ease, width 0.24s cubic-bezier(0.16, 1, 0.3, 1), height 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
+}
+
+body.cursor-active .custom-cursor-dot,
+body.cursor-active .custom-cursor-ring {
+  opacity: 1;
+}
+
+body.cursor-hover .custom-cursor-ring {
+  width: 54px;
+  height: 54px;
+  border-color: #06b6d4;
+  background: rgba(6, 182, 212, 0.14);
+  box-shadow: 0 0 28px rgba(6, 182, 212, 0.4);
+}
+
+body.cursor-hover .custom-cursor-dot {
+  background-color: #ffffff;
+}
+
+body.cursor-down .custom-cursor-ring {
+  width: 28px;
+  height: 28px;
+  border-color: #38bdf8;
+}
+
+.magnetic-item {
+  will-change: transform;
+}
+
+@media (pointer: coarse), (hover: none) {
+  .custom-cursor-dot,
+  .custom-cursor-ring {
+    display: none !important;
+  }
+}
+
+/* ─── Scroll Reveal Animations (Smooth Staggered Motion) ─── */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ─── Floating Living Canvas Background ─── */
+#quantum-bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.85;
+}
+
+html.light #quantum-bg-canvas {
+  opacity: 0.55;
+}
+
+/* ─── Glassmorphism & Card System (Blueprint Section 7) ─── */
+.card, .glass-panel {
+  background: var(--surface-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1.25rem; /* 20px */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s, box-shadow 0.3s;
+}
+
+.card:hover, .glass-panel:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-highlight);
+  box-shadow: 0 16px 36px -10px rgba(6, 182, 212, 0.18);
+}
+
+html.light .card:hover, html.light .glass-panel:hover {
+  box-shadow: 0 16px 36px -10px rgba(6, 182, 212, 0.14);
+}
+
+/* Glowing Border Card (Blueprint Section 7) */
+.card-glow, .glass-card-glow {
+  position: relative;
+}
+
+.card-glow::before, .glass-card-glow::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.5), rgba(99, 102, 241, 0.25), transparent 60%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Floating Pill Navbar & Glass Nav Compatibility */
+.glass-nav,
+.floating-nav {
+  background: rgba(9, 9, 11, 0.78);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.glass-nav.is-scrolled,
+.floating-nav.is-scrolled {
+  background: rgba(9, 9, 11, 0.94);
+  border-color: rgba(6, 182, 212, 0.35);
+  box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.75), 0 0 25px rgba(6, 182, 212, 0.16);
+}
+
+html.light .glass-nav,
+html.light .floating-nav {
+  background: rgba(255, 255, 255, 0.84);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.05);
+}
+
+html.light .glass-nav.is-scrolled,
+html.light .floating-nav.is-scrolled {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(6, 182, 212, 0.35);
+  box-shadow: 0 24px 50px -10px rgba(15, 23, 42, 0.14), 0 0 25px rgba(6, 182, 212, 0.12);
+}
+
+/* Glass Inputs */
+.glass-input {
+  background: rgba(16, 18, 27, 0.85);
+  border: 1px solid var(--border-subtle);
+  backdrop-filter: blur(12px);
+  color: var(--text-primary);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+html.light .glass-input {
+  background: rgba(241, 245, 249, 0.95);
+  border: 1px solid rgba(15, 23, 42, 0.14);
+}
+
+.glass-input:focus {
+  border-color: var(--brand-cyan);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.25);
+}
+
+/* ─── Button & Interactive Elements (Blueprint Section 8) ─── */
+.btn-primary {
+  background: linear-gradient(135deg, #06b6d4, #0d9488);
+  color: #ffffff !important;
+  font-weight: 750;
+  border-radius: 0.75rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.3);
+  border: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(6, 182, 212, 0.45);
+  filter: brightness(1.1);
+}
+
+.btn-primary:active {
+  transform: scale(0.96);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  font-weight: 700;
+  border-radius: 0.75rem;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+html.light .btn-secondary {
+  border-color: rgba(15, 23, 42, 0.15);
+}
+
+.btn-secondary:hover {
+  border-color: #06b6d4;
+  background: rgba(6, 182, 212, 0.08);
+}
+
+.btn-secondary:active {
+  transform: scale(0.96);
+}
+
+/* ─── Status Badges (Blueprint Section 8) ─── */
+.badge-safe {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 0.15rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  padding: 0.15rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.badge-danger {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 0.15rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ─── Icon Badge Container (Blueprint Section 4 & Playbook 2.1) ─── */
+.icon-badge {
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 0.75rem;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  color: #06b6d4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ─── Custom Scrollbar (Blueprint Section 2 & 11) ─── */
+.custom-scrollbar, ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(6, 182, 212, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(6, 182, 212, 0.6);
+}
+
+.momentum-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* ─── Keyframe Animations (Blueprint Section 5) ─── */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.35s ease-out both;
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.5deg);
+  }
+}
+
+.animate-float {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 7s ease-in-out infinite;
+}
+
+/* Marquee Component Architecture (Blueprint Section 5) */
+@keyframes marquee-ltr {
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-rtl {
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(50%); }
+}
+
+.marquee-container {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow: hidden !important;
+  user-select: none;
+}
+
+.animate-marquee,
+.marquee-group-ltr {
+  display: flex !important;
+  flex-shrink: 0 !important;
+  width: max-content !important;
+  animation: marquee-ltr 28s linear infinite !important;
+  will-change: transform;
+}
+
+[dir="rtl"] .animate-marquee,
+[dir="rtl"] .marquee-group-ltr {
+  animation: marquee-rtl 28s linear infinite !important;
+}
+
+.marquee-container:hover .animate-marquee,
+.marquee-container:hover .marquee-group-ltr {
+  animation-play-state: paused !important;
+}
+
+/* Range Slider Styling (Cyan Theme) */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  outline: none;
+}
+
+html.light input[type="range"] {
+  background: rgba(15, 23, 42, 0.1);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #06b6d4;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.7);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  background: #0891b2;
+}
+
+/* Micro-Interaction Button feedback */
+button, .clickable-chip {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+button:active, .clickable-chip:active {
+  transform: scale(0.96);
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-pop-in {
+  animation: popIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ─── Shimmer Wave Effect (Blueprint Section 12) ─── */
+@keyframes shimmerWave {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.shimmer-wave {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-wave::after {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(90deg,
+    rgba(255,255,255,0) 0,
+    rgba(255,255,255,0.06) 20%,
+    rgba(255,255,255,0.16) 60%,
+    rgba(255,255,255,0));
+  animation: shimmerWave 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  content: "";
+}
+
+html.light .shimmer-wave::after {
+  background-image: linear-gradient(90deg,
+    rgba(0,0,0,0) 0,
+    rgba(0,0,0,0.03) 20%,
+    rgba(0,0,0,0.08) 60%,
+    rgba(0,0,0,0));
+}
+
+/* ─── Mobile Taskbar Safe Padding (Playbook Section 3.1) ─── */
+.pb-safe {
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
+}
