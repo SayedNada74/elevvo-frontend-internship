@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236366f1'><polygon points='12 2 2 7 12 12 22 7 12 2'/><polyline points='2 17 12 22 22 17'/><polyline points='2 12 12 17 22 12'/></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ApexFreelance — Client Operations & Project Management Dashboard | Sayed Nada</title>
+    <meta name="description" content="Production-ready freelance client dashboard built with React, React Router, Tailwind CSS, Recharts, and Three.js for Sayed Nada." />
+    <meta name="author" content="Sayed Nada" />
+    <meta name="theme-color" content="#090a10" />
+    <meta property="og:title" content="ApexFreelance — Client Operations Dashboard | Sayed Nada" />
+    <meta property="og:description" content="High-performance client operations & analytics dashboard engineered with React, React Router, Tailwind CSS, Recharts, and Three.js." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Blocking Flash-Free Theme Script (Blueprint Section 10) -->
+    <script>
+      (function() {
+        try {
+          const savedTheme = localStorage.getItem('apex_react_theme') || 'dark';
+          if (savedTheme === 'light') {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+          } else {
+            document.documentElement.classList.remove('light');
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="bg-slate-50 dark:bg-[#090a10] text-slate-900 dark:text-[#f8fafc] antialiased selection:bg-indigo-500 selection:text-white min-h-screen transition-colors duration-200">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
