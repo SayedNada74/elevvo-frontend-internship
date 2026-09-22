@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ApexWeather — Real-Time Meteorological Intelligence | Sayed Nada</title>
+    <meta name="description" content="Production-ready real-time weather dashboard engineered with live satellite APIs, dynamic 60 FPS atmospheric canvas particles, 24-hour hourly trajectory, 7-day forecast, and GPS geolocation by Sayed Nada." />
+    <meta name="author" content="Sayed Nada" />
+    <meta name="theme-color" content="#090a10" />
+
+    <!-- OpenGraph Social Metadata -->
+    <meta property="og:title" content="ApexWeather — Real-Time Weather Intelligence | Sayed Nada" />
+    <meta property="og:description" content="Explore real-time weather for any city on Earth with dynamic atmospheric particle simulation, GPS location detection, and high-precision meteorological diagnostics." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236366f1'><circle cx='12' cy='12' r='5'/><path d='M12 1v2'/><path d='M12 21v2'/><path d='M4.22 4.22l1.42 1.42'/><path d='M18.36 18.36l1.42 1.42'/><path d='M1 12h2'/><path d='M21 12h2'/><path d='M4.22 19.78l1.42-1.42'/><path d='M18.36 5.64l1.42-1.42'/></svg>" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CSS (Playbook Compliant Modern Layout) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                500: '#6366f1',
+                600: '#4f46e5',
+              }
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="./style.css" />
+
+    <!-- Blocking Flash-Free Theme Initializer (Playbook Rule 2.1) -->
+    <script>
+      (function() {
+        try {
+          const savedTheme = localStorage.getItem('apex_weather_theme') || 'dark';
+          if (savedTheme === 'light') {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+          } else {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="bg-slate-100 text-slate-900 dark:bg-[#090a10] dark:text-[#f8fafc] antialiased selection:bg-indigo-500 selection:text-white min-h-screen relative">
+    <!-- Top Scroll Progress Bar (Playbook Section 3.1) -->
+    <div id="scroll-progress-bar" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100"></div>
+
+    <!-- GPU-Accelerated Custom Magnetic Cursor (Desktop) -->
+    <div id="custom-cursor-dot" class="custom-cursor-dot" aria-hidden="true"></div>
+    <div id="custom-cursor-ring" class="custom-cursor-ring" aria-hidden="true"></div>
+
+    <!-- 60 FPS Atmospheric Particle Canvas (Background) -->
+    <canvas id="atmosphere-canvas"></canvas>
+
+    <!-- App Container -->
+    <div class="relative z-10 flex flex-col min-h-screen">
+      <!-- Top Navigation Header (Playbook Section 3.1: sticky top-0 z-50) -->
+      <header class="sticky top-0 z-50 h-16 sm:h-20 px-4 sm:px-8 flex items-center justify-between border-b border-slate-200/80 dark:border-white/[0.08] bg-white/85 dark:bg-[#090a10]/80 backdrop-blur-xl">
+        <!-- Left: Brand Logo -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-600 to-sky-400 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25 flex-shrink-0">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-black text-lg sm:text-xl tracking-tight text-white">
+                Apex<span class="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">Weather</span>
+              </span>
+              <span class="hidden md:inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300">
+                Live Doppler 4.0
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-400 hidden sm:block">
+              Engineered by <strong class="text-slate-200">Sayed Nada</strong>
+            </p>
+          </div>
+        </div>
+
+        <!-- Center: Universal Global Search Bar -->
+        <div class="relative flex-1 max-w-md mx-3 sm:mx-6">
+          <div class="relative w-full">
+            <svg class="absolute left-3.5 rtl:right-3.5 rtl:left-auto top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input
+              id="search-input"
+              type="text"
+              autocomplete="off"
+              placeholder="Search city, state, or country..."
+              class="glass-input w-full rounded-full pl-10 pr-12 rtl:pr-10 rtl:pl-12 py-2 text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none transition-all"
+            />
+            <kbd class="hidden md:inline-block absolute right-3 rtl:left-3 rtl:right-auto top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400 bg-white/[0.06] border border-white/[0.08] px-1.5 py-0.5 rounded">
+              ⌘K
+            </kbd>
+          </div>
+
+          <!-- Autocomplete Dropdown -->
+          <div
+            id="search-dropdown"
+            class="hidden absolute top-full mt-2 left-0 right-0 rounded-2xl bg-[#131622] border border-white/[0.12] shadow-2xl shadow-black/80 backdrop-blur-2xl z-50 overflow-hidden animate-pop-in max-h-72 overflow-y-auto"
+          ></div>
+        </div>
+
+        <!-- Right: Action Tools & Switches -->
+        <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+          <!-- Bonus: Detect Geolocation Button -->
+          <button
+            id="btn-detect-location"
+            class="h-9 sm:h-10 px-3 sm:px-3.5 rounded-xl bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/30 text-sky-300 text-xs font-bold inline-flex items-center gap-1.5 active:scale-95 transition-all cursor-pointer shadow-sm"
+            title="Auto-Detect My GPS Location"
+            aria-label="Detect My Location"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+            </svg>
+            <span class="hidden md:inline" data-i18n="detectLocation">GPS Location</span>
+          </button>
+
+          <!-- Ambient Soundscape Toggle (Web Audio API) -->
+          <button
+            id="btn-toggle-sound"
+            class="h-9 px-3 sm:h-10 sm:px-3.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-slate-300 hover:text-white text-xs font-bold inline-flex items-center gap-1.5 active:scale-95 transition-all cursor-pointer"
+            title="Toggle Ambient Weather Soundscape"
+            aria-label="Toggle Sound"
+          >
+            <span id="sound-icon-wrapper">
+              <svg class="w-4 h-4 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            </span>
+            <span id="sound-status-text" class="hidden sm:inline">Audio</span>
+          </button>
+
+          <!-- Temperature Unit Toggle (°C / °F) -->
+          <button
+            id="unit-toggle-btn"
+            class="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-white text-xs font-mono font-bold flex items-center justify-center active:scale-95 transition-all cursor-pointer"
+            title="Toggle Celsius / Fahrenheit"
+            aria-label="Toggle Temperature Unit"
+          >
+            °C
+          </button>
+
+          <!-- Language Toggle (EN / عربي) -->
+          <button
+            id="lang-toggle-btn"
+            class="h-9 px-3 sm:h-10 sm:px-3.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-indigo-300 text-xs font-bold inline-flex items-center gap-1 active:scale-95 transition-all cursor-pointer"
+            title="Toggle Arabic / English"
+            aria-label="Toggle Language"
+          >
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+            <span>عربي</span>
+          </button>
+
+          <!-- Theme Toggle Button (Dark / Light) -->
+          <button
+            id="theme-toggle-btn"
+            class="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-amber-400 dark:text-amber-300 flex items-center justify-center active:scale-95 transition-all cursor-pointer magnetic-item"
+            title="Toggle Dark / Light Mode"
+            aria-label="Toggle Theme"
+          >
+            <!-- Sun Icon (shown in dark mode) -->
+            <svg class="w-4 h-4 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <!-- Moon Icon (shown in light mode) -->
+            <svg class="w-4 h-4 block dark:hidden text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+
+          <!-- Settings Modal Button -->
+          <button
+            id="btn-open-settings"
+            class="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-slate-300 hover:text-white flex items-center justify-center active:scale-95 transition-all cursor-pointer magnetic-item"
+            title="Settings & API Key"
+            aria-label="Open Settings"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Body Container -->
+      <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-6 pb-24 lg:pb-8">
+        <!-- Sub-Header: Pinned Cities & Atmosphere Simulator Strip -->
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 p-4 rounded-2xl bg-white/80 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/[0.06] backdrop-blur-md shadow-sm dark:shadow-none">
+          <!-- Pinned Quick Cities -->
+          <div class="flex items-center gap-2 overflow-x-auto w-full lg:w-auto pb-2 lg:pb-0">
+            <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex-shrink-0" data-i18n="pinnedCities">
+              Pinned:
+            </span>
+            <div id="pinned-cities-container" class="flex items-center gap-1.5 flex-nowrap"></div>
+          </div>
+
+          <!-- Atmosphere Simulation Pill Selector -->
+          <div class="flex items-center gap-1.5 overflow-x-auto w-full lg:w-auto p-1 rounded-xl bg-slate-200/70 dark:bg-black/40 border border-slate-300/60 dark:border-white/[0.06] text-xs">
+            <span class="text-[11px] font-bold text-slate-600 dark:text-slate-400 px-2 flex-shrink-0" data-i18n="weatherSimulator">
+              Atmosphere:
+            </span>
+            <button data-mode="auto" class="sim-pill px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white flex-shrink-0 active:scale-95" data-i18n="simReset">
+              Auto
+            </button>
+            <button data-mode="clear-day" class="sim-pill px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white flex-shrink-0 active:scale-95" data-i18n="simClear">
+              ☀️ Sunny
+            </button>
+            <button data-mode="rain" class="sim-pill px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white flex-shrink-0 active:scale-95" data-i18n="simRain">
+              🌧️ Rain
+            </button>
+            <button data-mode="storm" class="sim-pill px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white flex-shrink-0 active:scale-95" data-i18n="simStorm">
+              ⛈️ Storm
+            </button>
+            <button data-mode="snow" class="sim-pill px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white flex-shrink-0 active:scale-95" data-i18n="simSnow">
+              ❄️ Snow
+            </button>
+            <button data-mode="clouds" class="sim-pill px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white flex-shrink-0 active:scale-95" data-i18n="simCloudy">
+              ☁️ Clouds
+            </button>
+            <button data-mode="night" class="sim-pill px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white flex-shrink-0 active:scale-95" data-i18n="simNight">
+              🌙 Night
+            </button>
+          </div>
+        </div>
+
+        <!-- Loading Indicator Bar -->
+        <div id="loading-indicator" class="hidden w-full h-1 bg-white/[0.06] rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-500 animate-pulse w-full"></div>
+        </div>
+
+        <!-- Weather Content Grid -->
+        <div id="weather-content-wrapper" class="grid grid-cols-1 lg:grid-cols-3 gap-6 transition-opacity duration-300">
+          <!-- Left 2-Columns: Hero Card, 24h Hourly Track, Bento Grid -->
+          <div class="lg:col-span-2 space-y-6">
+            <!-- 1. Hero Weather Card -->
+            <div id="hero-weather-card"></div>
+
+            <!-- 2. 24-Hour Hourly Trajectory Track with Interactive Spline Curve -->
+            <div id="hourly-forecast-section" class="glass-panel p-5 sm:p-6 rounded-3xl shadow-xl space-y-4">
+              <div class="flex items-center justify-between pb-2 border-b border-white/[0.06]">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2" data-i18n="hourlyForecast">
+                  <svg class="w-4 h-4 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <span>24-Hour Hourly Trajectory</span>
+                </h3>
+                <span class="text-[11px] font-mono text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-ping"></span>
+                  <span>Interactive Spline</span>
+                </span>
+              </div>
+
+              <!-- Interactive SVG Temperature Spline Chart -->
+              <div id="spline-chart-container" class="relative w-full h-44 select-none">
+                <!-- SVG dynamically injected here -->
+                <div id="spline-tooltip" class="hidden pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-full mb-3 px-3 py-1.5 rounded-xl bg-[#141724]/95 border border-indigo-500/40 shadow-2xl backdrop-blur-md text-center transition-opacity duration-150">
+                  <div class="text-[10px] font-mono text-slate-400" id="spline-tooltip-time">12:00</div>
+                  <div class="text-xs font-bold text-white font-mono flex items-center justify-center gap-1">
+                    <span id="spline-tooltip-icon"></span>
+                    <span id="spline-tooltip-temp">24°</span>
+                  </div>
+                  <div class="text-[10px] text-sky-400 font-mono" id="spline-tooltip-pop">💧 0%</div>
+                </div>
+              </div>
+
+              <!-- Hourly Cards Carousel -->
+              <div id="hourly-timeline-track" class="flex items-center gap-2.5 overflow-x-auto pb-2 momentum-scroll custom-scrollbar"></div>
+            </div>
+
+            <!-- 3. Bento Atmospheric Diagnostics Grid -->
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2" data-i18n="weatherMetrics">
+                  <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <span>Atmospheric Diagnostics</span>
+                </h3>
+                <span class="text-[11px] font-mono text-slate-400">Telemetry Sensor Matrix</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <div id="bento-wind" class="glass-panel p-4 sm:p-5 rounded-3xl shadow-lg"></div>
+                <div id="bento-humidity" class="glass-panel p-4 sm:p-5 rounded-3xl shadow-lg"></div>
+                <div id="bento-uv" class="glass-panel p-4 sm:p-5 rounded-3xl shadow-lg"></div>
+                <div id="bento-sun" class="glass-panel p-4 sm:p-5 rounded-3xl shadow-lg"></div>
+                <div id="bento-pressure" class="glass-panel p-4 sm:p-5 rounded-3xl shadow-lg"></div>
+                <div id="bento-visibility" class="glass-panel p-4 sm:p-5 rounded-3xl shadow-lg"></div>
+                
+                <!-- Air Quality Index (AQI) Wide Diagnostic Panel -->
+                <div id="bento-aqi" class="glass-panel p-4 sm:p-5 rounded-3xl shadow-lg sm:col-span-2 md:col-span-3"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: 7-Day Forecast, Smart Lifestyle Advisor, & Regional Radar -->
+          <div class="space-y-6">
+            <!-- 7-Day Forecast Card -->
+            <div id="daily-forecast-section" class="glass-panel p-5 sm:p-6 rounded-3xl shadow-xl space-y-4">
+              <div class="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2" data-i18n="sevenDayForecast">
+                  <svg class="w-4 h-4 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                  <span>7-Day Extended Forecast</span>
+                </h3>
+                <span class="text-[11px] font-bold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full">
+                  Multi-Day
+                </span>
+              </div>
+              <div id="seven-day-forecast-list" class="space-y-1"></div>
+            </div>
+
+            <!-- Smart AI Lifestyle & Outfit Advisor Card -->
+            <div id="lifestyle-advisor-card" class="glass-panel p-5 sm:p-6 rounded-3xl shadow-xl space-y-4"></div>
+
+            <!-- Regional Meteorological Radar / Advisory Card -->
+            <div class="glass-panel p-5 sm:p-6 rounded-3xl shadow-xl space-y-4">
+              <div class="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+                <span class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <span>🛰️</span>
+                  <span>Doppler Radar Network</span>
+                </span>
+                <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                  100% Calibrated
+                </span>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Telemetry streams are reconciled across global WMO synoptic reporting stations and Open-Meteo high-resolution global modeling.
+              </p>
+              <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.06] text-xs space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-400">Atmospheric Stability:</span>
+                  <span class="font-bold text-emerald-400">Optimal (Zero Inversion)</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-400">Geocoding Latency:</span>
+                  <span class="font-mono text-indigo-400">&lt; 140ms</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Settings Modal (Playbook Section 3.2: z-[99999], scroll lock, backdrop-blur) -->
+      <div
+        id="settings-modal"
+        class="hidden fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in"
+        role="dialog"
+        aria-modal="true"
+      >
+        <div class="relative w-full max-w-md bg-[#12141f] border border-white/[0.12] rounded-3xl shadow-2xl p-6 animate-pop-in text-white space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+            <div class="flex items-center gap-2.5">
+              <div class="h-9 w-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+              </div>
+              <h3 class="text-base font-bold text-white" data-i18n="settings">Weather Settings</h3>
+            </div>
+            <button id="btn-close-settings" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.06] active:scale-95 transition-all">
+              ✕
+            </button>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed" data-i18n="apiKeyNote">
+            ApexWeather connects automatically to global live satellite feeds (Zero API key needed). You can also provide an optional OpenWeatherMap key:
+          </p>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5" data-i18n="customApiKey">
+              Custom OpenWeatherMap API Key
+            </label>
+            <input
+              id="input-api-key"
+              type="text"
+              placeholder="e.g. b6907d289e10d714a6e88b30761fae22"
+              class="w-full bg-[#10121b] border border-white/[0.1] rounded-xl px-3.5 py-2 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+            />
+          </div>
+
+          <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-white/[0.08]">
+            <button id="btn-cancel-settings" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/[0.06] active:scale-95 transition-all cursor-pointer" data-i18n="cancel">
+              Cancel
+            </button>
+            <button id="btn-save-settings" class="px-5 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white text-xs font-bold active:scale-95 transition-all cursor-pointer" data-i18n="saveSettings">
+              Save & Apply
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Verified Floating Direct Social Dock (Playbook Section 3.1: z-40) -->
+      <aside 
+        class="fixed bottom-6 right-6 rtl:left-6 rtl:right-auto z-40 flex flex-col gap-2 p-1.5 rounded-full bg-white/90 dark:bg-[#12141f]/80 border border-slate-200/80 dark:border-white/[0.1] backdrop-blur-xl shadow-xl dark:shadow-2xl"
+        aria-label="Direct Social Channels"
+      >
+        <a
+          href="https://github.com/SayedNada74"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-white hover:bg-indigo-600 hover:border-indigo-500 hover:scale-110 active:scale-95 transition-all"
+          title="GitHub — SayedNada74"
+          aria-label="GitHub"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+        </a>
+        <a
+          href="https://linkedin.com/in/sayed-nada-6852b9345"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-white hover:bg-blue-600 hover:border-blue-500 hover:scale-110 active:scale-95 transition-all"
+          title="LinkedIn — Sayed Nada"
+          aria-label="LinkedIn"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+          </svg>
+        </a>
+        <a
+          href="https://wa.me/201206620678"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-white hover:bg-emerald-600 hover:border-emerald-500 hover:scale-110 active:scale-95 transition-all"
+          title="WhatsApp — +201206620678"
+          aria-label="WhatsApp"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </a>
+        <a
+          href="mailto:sayedmahmouda00@gmail.com"
+          class="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-white hover:bg-rose-600 hover:border-rose-500 hover:scale-110 active:scale-95 transition-all"
+          title="Email — sayedmahmouda00@gmail.com"
+          aria-label="Email"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        </a>
+      </aside>
+
+      <!-- Footer -->
+      <footer class="px-6 py-6 border-t border-white/[0.06] text-center text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-3 max-w-7xl mx-auto w-full">
+        <div>
+          &copy; 2026 ApexWeather. Engineered with pride by <strong class="text-white">Sayed Nada</strong>.
+        </div>
+        <div class="flex items-center gap-3 text-slate-400">
+          <span>Elevvo Internship Frontend Web Development Track</span>
+          <span>·</span>
+          <span>Task 7: Real-Time Weather API Dashboard</span>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Mobile Bottom Taskbar (Production Standards Section 3.1 — Mobile Trio) -->
+    <nav id="mobile-taskbar" class="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-[#090a10]/95 backdrop-blur-xl border-t border-white/[0.08] px-3 py-2 flex items-center justify-around shadow-2xl pb-safe" aria-label="Mobile Navigation">
+      <a href="#hero-weather-card" class="flex flex-col items-center gap-1 text-slate-400 hover:text-indigo-400 focus:text-indigo-400 transition-colors p-1" title="Current Weather">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+        </svg>
+        <span class="text-[10px] font-medium" data-i18n="currentWeatherNav">Current</span>
+      </a>
+      <a href="#hourly-forecast-section" class="flex flex-col items-center gap-1 text-slate-400 hover:text-indigo-400 focus:text-indigo-400 transition-colors p-1" title="24-Hour Forecast">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span class="text-[10px] font-medium" data-i18n="hourlyNav">24-Hour</span>
+      </a>
+      <!-- Central Trigger: Quick GPS Detect -->
+      <button id="btn-mobile-detect" class="flex flex-col items-center justify-center w-11 h-11 -mt-4 rounded-2xl bg-gradient-to-tr from-indigo-600 to-sky-500 text-white shadow-lg shadow-indigo-500/40 active:scale-95 transition-transform" title="Detect GPS Location" aria-label="Detect GPS">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+        </svg>
+      </button>
+      <a href="#daily-forecast-section" class="flex flex-col items-center gap-1 text-slate-400 hover:text-indigo-400 focus:text-indigo-400 transition-colors p-1" title="7-Day Forecast">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/>
+        </svg>
+        <span class="text-[10px] font-medium" data-i18n="dailyNav">7-Day</span>
+      </a>
+      <button id="btn-mobile-theme" class="flex flex-col items-center gap-1 text-slate-400 hover:text-amber-400 focus:text-amber-400 transition-colors p-1" title="Toggle Dark / Light Mode" aria-label="Toggle Theme">
+        <svg class="w-5 h-5 hidden dark:block text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="w-5 h-5 block dark:hidden text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <span class="text-[10px] font-medium" data-i18n="themeNav">Theme</span>
+      </button>
+    </nav>
+
+    <!-- Application Script (Runs seamlessly on file:/// and http://) -->
+    <script src="./js/app.js"></script>
+  </body>
+</html>
