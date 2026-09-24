@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='20' height='14' x='2' y='7' rx='2' ry='2'/><path d='M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16'/></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="CareerFlow - High Performance Kanban Job Application Tracker & Pipeline Analytics" />
+    <title>CareerFlow — Kanban Job Tracker & Pipeline Analytics</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Blocking Flash-free Theme Script -->
+    <script>
+      (function() {
+        try {
+          const stored = localStorage.getItem('careerflow_theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (stored === 'light' || (!stored && !prefersDark)) {
+            document.documentElement.classList.remove('dark');
+          } else {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body class="bg-surface-light dark:bg-surface-dark text-slate-800 dark:text-slate-100 min-h-screen antialiased selection:bg-indigo-500 selection:text-white transition-colors duration-200">
+    <!-- Top Global Scroll Progress Bar -->
+    <div id="scroll-progress-bar" class="fixed top-0 left-0 h-[3px] bg-gradient-to-r from-cyan-500 via-indigo-500 to-emerald-500 z-50 transition-all duration-75 w-0 pointer-events-none" aria-hidden="true"></div>
+
+    <!-- Custom Magnetic Cursor Elements -->
+    <div id="custom-cursor-ring" class="fixed pointer-events-none z-50 rounded-full border border-indigo-400/60 dark:border-indigo-400/70 w-9 h-9 -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 hidden md:block" aria-hidden="true"></div>
+    <div id="custom-cursor-dot" class="fixed pointer-events-none z-50 rounded-full bg-indigo-500 dark:bg-indigo-400 w-2 h-2 -translate-x-1/2 -translate-y-1/2 hidden md:block" aria-hidden="true"></div>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
