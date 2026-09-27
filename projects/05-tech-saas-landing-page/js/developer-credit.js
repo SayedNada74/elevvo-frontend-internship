@@ -1,5 +1,6 @@
 /**
- * Developer Credit Floating Widget
+ * Developer Credit Floating Widget — NovaScale AI (Tailwind dark: variant)
+ * Adapts to the project's indigo/cyan Tailwind palette with dark: class support.
  * Engineered by Sayed Nada (@SayedNada74)
  */
 (function() {
@@ -7,12 +8,13 @@
 
   const style = document.createElement('style');
   style.textContent = `
+    /* ── Root Container ── */
     #sayed-developer-credit-root {
       position: fixed;
       bottom: 24px;
       right: 24px;
       z-index: 999999;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.5;
     }
     @media (max-width: 768px) {
@@ -21,19 +23,21 @@
         right: 16px;
       }
     }
+
+    /* ── Light Mode Trigger Pill ── */
     .sayed-dev-trigger {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       padding: 8px 18px;
-      background: rgba(13, 17, 23, 0.95);
-      border: 1.5px solid #14b8a6;
+      background: #ffffff;
+      border: 1.5px solid #6366f1;
       border-radius: 9999px;
-      color: #ffffff;
+      color: #0f172a;
       font-size: 13px;
       font-weight: 500;
       cursor: pointer;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(20, 184, 166, 0.2);
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08), 0 0 12px rgba(99, 102, 241, 0.08);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -41,8 +45,7 @@
       outline: none;
     }
     .sayed-dev-trigger:hover {
-      border-color: #2dd4bf;
-      box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.6), 0 0 22px rgba(45, 212, 191, 0.35);
+      box-shadow: 0 12px 30px -5px rgba(15, 23, 42, 0.12), 0 0 20px rgba(99, 102, 241, 0.15);
       transform: translateY(-2px);
     }
     .sayed-dev-trigger:active {
@@ -50,31 +53,33 @@
     }
     .sayed-dev-code {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      color: #14b8a6;
+      color: #6366f1;
       font-weight: 700;
       font-size: 13px;
     }
     .sayed-dev-label {
-      color: #14b8a6;
+      color: #64748b;
       font-weight: 500;
       font-size: 12px;
     }
     .sayed-dev-name {
-      color: #ffffff;
+      color: #0f172a;
       font-weight: 700;
       letter-spacing: 0.2px;
       font-size: 13px;
     }
+
+    /* ── Light Mode Popup Card ── */
     .sayed-dev-popup {
       position: absolute;
       bottom: calc(100% + 12px);
       right: 0;
       width: 260px;
-      background: rgba(15, 17, 23, 0.96);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
       border-radius: 18px;
       padding: 14px;
-      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(20, 184, 166, 0.15);
+      box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.12);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       opacity: 0;
@@ -92,14 +97,14 @@
       align-items: center;
       justify-content: space-between;
       padding-bottom: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid #e2e8f0;
       margin-bottom: 8px;
     }
     .sayed-dev-title {
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 1.2px;
-      color: #14b8a6;
+      color: #6366f1;
       font-family: ui-monospace, monospace;
       text-transform: uppercase;
     }
@@ -115,11 +120,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: color 0.15s;
+      transition: color 0.15s, background 0.15s;
     }
     .sayed-dev-close:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.08);
+      color: #0f172a;
+      background: rgba(99, 102, 241, 0.08);
     }
     .sayed-dev-links {
       display: flex;
@@ -132,21 +137,78 @@
       justify-content: space-between;
       padding: 10px 12px;
       border-radius: 12px;
-      color: #f1f5f9;
+      color: #0f172a;
       text-decoration: none;
       font-size: 14px;
       font-weight: 600;
       transition: all 0.15s ease;
     }
     .sayed-dev-link-item:hover {
-      background: rgba(255, 255, 255, 0.08);
-      color: #2dd4bf;
+      background: rgba(99, 102, 241, 0.08);
+      color: #6366f1;
     }
     .sayed-dev-link-item svg {
       width: 18px;
       height: 18px;
       fill: currentColor;
       flex-shrink: 0;
+    }
+
+    /* ── Dark Mode Overrides (Tailwind dark: class on <html>) ── */
+    .dark .sayed-dev-trigger,
+    html.dark .sayed-dev-trigger {
+      background: rgba(15, 17, 26, 0.95);
+      border-color: #818cf8;
+      color: #f4f4f5;
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4), 0 0 15px rgba(129, 140, 248, 0.15);
+    }
+    .dark .sayed-dev-trigger:hover,
+    html.dark .sayed-dev-trigger:hover {
+      box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.6), 0 0 22px rgba(129, 140, 248, 0.3);
+    }
+    .dark .sayed-dev-code,
+    html.dark .sayed-dev-code {
+      color: #818cf8;
+    }
+    .dark .sayed-dev-label,
+    html.dark .sayed-dev-label {
+      color: #a1a1aa;
+    }
+    .dark .sayed-dev-name,
+    html.dark .sayed-dev-name {
+      color: #ffffff;
+    }
+    .dark .sayed-dev-popup,
+    html.dark .sayed-dev-popup {
+      background: rgba(15, 17, 23, 0.96);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(129, 140, 248, 0.1);
+    }
+    .dark .sayed-dev-header,
+    html.dark .sayed-dev-header {
+      border-bottom-color: rgba(255, 255, 255, 0.08);
+    }
+    .dark .sayed-dev-title,
+    html.dark .sayed-dev-title {
+      color: #818cf8;
+    }
+    .dark .sayed-dev-close,
+    html.dark .sayed-dev-close {
+      color: #71717a;
+    }
+    .dark .sayed-dev-close:hover,
+    html.dark .sayed-dev-close:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .dark .sayed-dev-link-item,
+    html.dark .sayed-dev-link-item {
+      color: #f1f5f9;
+    }
+    .dark .sayed-dev-link-item:hover,
+    html.dark .sayed-dev-link-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #a5b4fc;
     }
   `;
   document.head.appendChild(style);
