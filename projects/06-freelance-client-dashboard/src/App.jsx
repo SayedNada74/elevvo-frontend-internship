@@ -5,6 +5,7 @@ import { Header } from './components/layout/Header';
 import { MobileTaskbar } from './components/layout/MobileTaskbar';
 import { SocialDock } from './components/layout/SocialDock';
 import { CustomCursor } from './components/layout/CustomCursor';
+import { DeveloperCredit } from './components/layout/DeveloperCredit';
 import { Toast } from './components/ui/Toast';
 import { NewProjectModal } from './components/modals/NewProjectModal';
 import { InvoiceModal } from './components/modals/InvoiceModal';
@@ -14,8 +15,9 @@ export const App = () => {
 
   return (
     <div className="min-h-screen flex bg-slate-50 dark:bg-[#090a10] text-slate-900 dark:text-[#f8fafc] transition-colors duration-200">
-      {/* 120 FPS Magnetic Cursor */}
+      {/* 120 FPS Magnetic Cursor & Developer Credits */}
       <CustomCursor />
+      <DeveloperCredit />
 
       {/* Main Glass Sidebar */}
       <Sidebar 
@@ -45,7 +47,7 @@ export const App = () => {
         {/* Footer */}
         <footer className="px-6 py-4 border-t border-slate-200 dark:border-white/[0.06] text-center text-xs text-slate-500 dark:text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-2 max-w-7xl mx-auto w-full mb-16 lg:mb-0">
           <div>
-            &copy; 2026 ApexFreelance. Engineered with pride by <strong className="text-slate-900 dark:text-white">Sayed Nada</strong>.
+            &copy; 2026 ApexFreelance. Designed & Engineered with pride by <a href="https://github.com/SayedNada74" target="_blank" rel="noopener noreferrer" className="font-bold text-indigo-600 dark:text-indigo-400 hover:underline">Sayed Nada (@SayedNada74)</a>.
           </div>
           <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400">
             <span>Elevvo Internship Frontend Track</span>

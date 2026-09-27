@@ -9,13 +9,15 @@ import { ExportModal } from './components/modals/ExportModal';
 import { MobileTaskbar } from './components/layout/MobileTaskbar';
 import { CustomCursor } from './components/ui/CustomCursor';
 import { ScrollProgress } from './components/ui/ScrollProgress';
+import { DeveloperCredit } from './components/ui/DeveloperCredit';
 
 export const App: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-surface-light dark:bg-surface-dark transition-colors duration-200">
-      {/* Dynamic Cursor & Scroll Progress */}
+      {/* Dynamic Cursor & Scroll Progress & Developer Credit */}
       <CustomCursor />
       <ScrollProgress />
+      <DeveloperCredit />
 
       {/* Header */}
       <Header />

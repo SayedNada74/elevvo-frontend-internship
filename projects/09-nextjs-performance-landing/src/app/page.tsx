@@ -13,13 +13,15 @@ import { Faq } from '../components/sections/Faq';
 import { CtaBanner } from '../components/sections/CtaBanner';
 import { CustomCursor } from '../components/ui/CustomCursor';
 import { ScrollProgress } from '../components/ui/ScrollProgress';
+import { DeveloperCredit } from '../components/ui/DeveloperCredit';
 
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-surface-light dark:bg-surface-dark transition-colors duration-200">
-      {/* Custom Magnetic Cursor & Scroll Progress Indicator */}
+      {/* Custom Magnetic Cursor & Scroll Progress & Developer Credit */}
       <CustomCursor />
       <ScrollProgress />
+      <DeveloperCredit />
 
       {/* Global Navigation Header */}
       <Header />

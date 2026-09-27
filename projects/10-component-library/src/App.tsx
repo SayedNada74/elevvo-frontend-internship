@@ -54,6 +54,7 @@ import {
 
 import { Cursor } from './components/Cursor/Cursor';
 import { Magnetic } from './components/Cursor/Magnetic';
+import { DeveloperCredit } from './components/DeveloperCredit/DeveloperCredit';
 
 type TabType = 'components' | 'tokens' | 'tests' | 'package';
 
@@ -280,6 +281,7 @@ export function App() {
   return (
     <div className="min-h-screen font-sans antialiased selection:bg-indigo-500 selection:text-white transition-colors duration-300">
       <Cursor />
+      <DeveloperCredit />
       
       {/* Top Banner Navigation */}
       <motion.header 
